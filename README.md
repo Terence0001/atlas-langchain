@@ -28,7 +28,7 @@ git clone https://github.com/wbleonard/atlas-langchain.git
 2. Update [params.py](params.py) with your MongoDB connection string and Open AI [API key](https://platform.openai.com/account/api-keys).
 3. Create a new Python environment
 ```zsh
-python3 -m venv env
+virtualenv -p python3.9.12 venv
 ```
 4. Activate the new Python environment
 ```zsh

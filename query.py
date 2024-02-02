@@ -1,11 +1,13 @@
 import argparse
 import params
 from pymongo import MongoClient
-from langchain.vectorstores import MongoDBAtlasVectorSearch
+from langchain_community.vectorstores import MongoDBAtlasVectorSearch
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.llms import OpenAI
 from langchain.retrievers import ContextualCompressionRetriever
+# from langchain_community.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import LLMChainExtractor
+# from langchain_community.retrievers.document_compressors import LLMChainExtractor
 import warnings
 
 # Filter out the UserWarning from langchain
@@ -18,8 +20,8 @@ args = parser.parse_args()
 
 if args.question is None:
     # Some questions to try...
-    query = "How big is the telecom company?"
-    query = "Who started AT&T?"
+    query = "C'est quoi la commande publique ?"
+    # query = "Who started AT&T?"
     #query = "Where is AT&T based?"
     #query = "What venues are AT&T branded?"
     #query = "How big is BofA?"
@@ -32,7 +34,7 @@ if args.question is None:
 else:
     query = args.question
 
-print("\nYour question:")
+print("\nVotre question:")
 print("-------------")
 print(query)
 
@@ -48,10 +50,13 @@ vectorStore = MongoDBAtlasVectorSearch(
 # perform a similarity search between the embedding of the query and the embeddings of the documents
 # print("\nQuery Response:")
 print("---------------")
-docs = vectorStore.max_marginal_relevance_search(query, K=1)
+docs = vectorStore.max_marginal_relevance_search(query, K=5)
 
-print(docs[0].metadata['title'])
-print(docs[0].page_content)
+if docs:
+    print(docs[0].metadata['title'])
+    print(docs[0].page_content)
+else:
+    print("Aucun document pertinent trouvé.")
 
 # Contextual Compression
 llm = OpenAI(openai_api_key=params.openai_api_key, temperature=0)
@@ -62,7 +67,7 @@ compression_retriever = ContextualCompressionRetriever(
     base_retriever=vectorStore.as_retriever()
 )
 
-print("\nAI Response:")
+print("\nRéponse de l'IA:")
 print("-----------")
 compressed_docs = compression_retriever.get_relevant_documents(query)
 print(compressed_docs[0].metadata['title'])

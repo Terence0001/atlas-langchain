@@ -1,6 +1,6 @@
-openai_api_key = '<OpenAI API Key>'
+openai_api_key = ''
 
-mongodb_conn_string = '<Application connection string of Atlas cluster>'
-db_name = "search_db"
-collection_name = "search_col"
-index_name = "vsearch_index"
+mongodb_conn_string = ''
+db_name = "straticia_knowledge_base"
+collection_name = "commande_publique"
+index_name = "default"
